@@ -21,7 +21,13 @@ class App extends Component {
     // this.eventSource.addEventListener('node', this.handleNodeEvent, false);
     // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
   }
-  state = {};
+  state = {
+    movies:[{
+      title:"Reise nach Poopmandoo",
+      icon:"icon.png",
+      delay: 50
+    }]
+  };
 
   render() {
     return (
@@ -34,6 +40,7 @@ class App extends Component {
         />
         <Playlist
           api_host={this.api_host}
+          movies={this.state.movies}
         />
       </div>
     );
@@ -47,7 +54,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.update();
+    // this.update();
     // this.interval = setInterval(this.update, 1000);
   }
 
