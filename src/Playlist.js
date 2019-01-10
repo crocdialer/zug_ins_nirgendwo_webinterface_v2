@@ -2,6 +2,10 @@ import {postData, nodeCommand} from './App.js'
 import React, { Component } from 'react';
 import './Playlist.css';
 
+function MovieItem(props){
+
+}
+
 class Playlist extends Component {
 
   renderMovieList(movieList){
