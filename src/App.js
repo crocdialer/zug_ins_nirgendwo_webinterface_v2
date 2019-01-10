@@ -9,20 +9,6 @@ var api_host = "http://" + window.location.hostname +
 
 class App extends Component {
 
-  constructor(props){
-    super(props);
-    this.api_host = api_host
-
-    // register event-stream
-    this.eventSource = new EventSource(this.api_host + "/events")
-
-    // fires only for unnamed events
-    // this.eventSource.onmessage = this.handleSSE
-    // this.eventSource.addEventListener('node', this.handleNodeEvent, false);
-    // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
-
-    // console.log(this.state.playlists[this.state.current_index]);
-  }
   state =
   {
       current_index : 1,
@@ -55,6 +41,36 @@ class App extends Component {
       ]
   };
 
+  constructor(props){
+    super(props);
+    this.api_host = api_host
+
+    // register event-stream
+    this.eventSource = new EventSource(this.api_host + "/events")
+
+    // fires only for unnamed events
+    // this.eventSource.onmessage = this.handleSSE
+    // this.eventSource.addEventListener('node', this.handleNodeEvent, false);
+    // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
+
+    this.state.playlists.unshift({title: "All", movies: this.createAllMoviesList()});
+  }
+
+  setCurrentPlaylist = (index) =>{
+      if(index >= 0 && index < this.state.playlists.length){
+        console.log("setCurrentPlaylist: " + index)
+        this.setState(Object.assign(this.state, {current_index: index}));
+      }
+  }
+
+  createAllMoviesList(){
+    let allMovies = [];
+    for (let i in this.state.movies){
+      allMovies.push(this.state.movies[i].title)
+    }
+    return allMovies;
+  }
+
   render() {
     return (
       <div className="zug_ins_nirgendwo_ui">
@@ -66,8 +82,10 @@ class App extends Component {
         />
         <Playlist
           api_host={this.api_host}
-          playlist={this.state.playlists[this.state.current_index]}
-          movies={this.state.movies}
+          state = {this.state}
+          setPlayListFn = {this.setCurrentPlaylist}
+          // playlist={this.state.playlists[this.state.current_index]}
+          // movies={this.state.movies}
         />
       </div>
     );
