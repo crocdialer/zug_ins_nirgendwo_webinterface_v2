@@ -22,9 +22,30 @@ class Playlist extends Component {
     return movies;
   }
 
+  createMovieObjectList(){
+    let retList = []
+
+    for(let i in this.props.playlist.movies){
+
+      let movieTitle = this.props.playlist.movies[i]
+      console.log(movieTitle)
+
+      // lookup movie_obj by title
+      for (let j in this.props.movies){
+        let movieObj = this.props.movies[j]
+
+          if(movieObj.title == movieTitle){
+            retList.push(movieObj);
+            break;
+          }
+      }
+    }
+    return retList;
+  }
+
   render() {
     let api_host = this.props.api_host;
-
+    let movieList = this.createMovieObjectList()
     return (
       <div className="container playlist">
         <div className="col-sm-10 col-10">
@@ -32,7 +53,7 @@ class Playlist extends Component {
             movies
           </h2>
         </div>
-        {this.renderMovieList(this.props.movies)}
+        {this.renderMovieList(movieList)}
       </div>
     );
   }

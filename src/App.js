@@ -20,13 +20,39 @@ class App extends Component {
     // this.eventSource.onmessage = this.handleSSE
     // this.eventSource.addEventListener('node', this.handleNodeEvent, false);
     // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
+
+    // console.log(this.state.playlists[this.state.current_index]);
   }
-  state = {
-    movies:[{
-      title:"Reise nach Poopmandoo",
-      icon:"icon.png",
-      delay: 50
-    }]
+  state =
+  {
+      current_index : 1,
+      playlists: [
+        {
+          title: "playlist_01",
+          movies:["Reise nach Poopmandoo"]
+        },
+        {
+          title: "playlist_02",
+          movies:["Schrecken einer Ehe 5", "Tufftufftuff die Eisenbahn"]
+        }
+      ],
+      movies:[
+        {
+          title:"Reise nach Poopmandoo",
+          icon:"path/to/icon.png",
+          delay: 50
+        },
+        {
+          title:"Schrecken einer Ehe 5",
+          icon:"path/to/icon.png",
+          delay: 250
+        },
+        {
+          title:"Tufftufftuff die Eisenbahn",
+          icon:"path/to/icon.png",
+          delay: -50
+        }
+      ]
   };
 
   render() {
@@ -40,6 +66,7 @@ class App extends Component {
         />
         <Playlist
           api_host={this.api_host}
+          playlist={this.state.playlists[this.state.current_index]}
           movies={this.state.movies}
         />
       </div>
