@@ -3,6 +3,7 @@ import './App.css';
 import NavBar from './NavBar';
 import PlaybackComponent from './PlaybackComponent';
 import Playlist from './Playlist';
+import Movielist from './Movielist';
 
 var api_host = "http://" + window.location.hostname +
   ( (window.location.port === 3000)  ? ":8080" : (":" + window.location.port))
@@ -56,14 +57,14 @@ class App extends Component {
     this.state.playlists.unshift({title: "All", movies: this.createAllMoviesList()});
   }
 
-  setCurrentPlaylist = (index) =>{
+  setCurrentPlaylist = (index)=>{
       if(index >= 0 && index < this.state.playlists.length){
-        console.log("setCurrentPlaylist: " + index)
+        // console.log("setCurrentPlaylist: " + index)
         this.setState(Object.assign(this.state, {current_index: index}));
       }
   }
 
-  createAllMoviesList(){
+  createAllMoviesList = ()=>{
     let allMovies = [];
     for (let i in this.state.movies){
       allMovies.push(this.state.movies[i].title)
@@ -84,8 +85,9 @@ class App extends Component {
           api_host={this.api_host}
           state = {this.state}
           setPlayListFn = {this.setCurrentPlaylist}
-          // playlist={this.state.playlists[this.state.current_index]}
-          // movies={this.state.movies}
+        />
+        <Movielist
+          state = {this.state}
         />
       </div>
     );

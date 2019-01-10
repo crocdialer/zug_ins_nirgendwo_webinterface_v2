@@ -86,10 +86,6 @@ class Playlist extends Component {
     return (
       <div className="container playlist">
         <div className="col-sm-10 col-10">
-          {/* <h2>
-            playlist: {playlist.title}
-          </h2> */}
-
           <PlayListChooser
             state = {this.props.state}
             setPlayListFn = {this.props.setPlayListFn}
