@@ -55,13 +55,37 @@ class App extends Component {
     // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
 
     this.state.playlists.unshift({title: "All", movies: this.createAllMoviesList()});
+
+    // function binding
+    this.setCurrentPlaylist = this.setCurrentPlaylist.bind(this);
+    this.addNewPlaylist = this.addNewPlaylist.bind(this);
+    this.deletePlaylist = this.deletePlaylist.bind(this);
   }
 
-  setCurrentPlaylist = (index)=>{
+  setCurrentPlaylist(index){
       if(index >= 0 && index < this.state.playlists.length){
         // console.log("setCurrentPlaylist: " + index)
         this.setState(Object.assign(this.state, {current_index: index}));
       }
+  }
+
+  addNewPlaylist(title){
+    console.log("addNewPlaylist:\n" + title)
+    let newState = this.state;
+    newState.playlists.push({title: title, movies:[]})
+    this.setState(newState)
+  }
+
+  deletePlaylist(index){
+    console.log("deletePlaylist:\n" + index)
+
+    // skip first entry (implicit "All" playlist)
+    if(index >= 1 && index < this.state.playlists.length){
+      let newState = this.state;
+      newState.playlists.splice(index, 1)
+      newState.current_index = Math.min(newState.current_index, newState.playlists.length - 1)
+      this.setState(newState)
+    }
   }
 
   createAllMoviesList = ()=>{
@@ -83,8 +107,10 @@ class App extends Component {
         />
         <Playlist
           api_host={this.api_host}
-          state = {this.state}
-          setPlayListFn = {this.setCurrentPlaylist}
+          state={this.state}
+          setPlaylistFn={this.setCurrentPlaylist}
+          deletePlaylistFn={this.deletePlaylist}
+          addNewPlaylistFn={this.addNewPlaylist}
         />
         <Movielist
           state = {this.state}
