@@ -112,9 +112,9 @@ class App extends Component {
           deletePlaylistFn={this.deletePlaylist}
           addNewPlaylistFn={this.addNewPlaylist}
         />
-        <Movielist
+        {/* <Movielist
           state = {this.state}
-        />
+        /> */}
       </div>
     );
   }
