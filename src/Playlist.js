@@ -1,5 +1,6 @@
 import {postData, nodeCommand} from './App.js'
 import React, { Component } from 'react';
+import PlaylistControls from './PlaylistControls.js'
 import './Playlist.css';
 
 function MovieItem(props){
@@ -33,7 +34,7 @@ function PlayListChooser(props){
 
   return(
     <div className="dropdown">
-      <button className="btn btn-secondary dropdown-toggle play" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {props.state.playlists[props.state.current_index].title}
       </button>
       <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -85,12 +86,10 @@ class Playlist extends Component {
 
     return (
       <div className="container playlist">
-        <div className="col-sm-10 col-10">
-          <PlayListChooser
-            state = {this.props.state}
-            setPlayListFn = {this.props.setPlayListFn}
-          />
-        </div>
+        <PlaylistControls
+          state = {this.props.state}
+          setPlayListFn = {this.props.setPlayListFn}
+        />
         {this.renderMovieList(movieList)}
       </div>
     );
