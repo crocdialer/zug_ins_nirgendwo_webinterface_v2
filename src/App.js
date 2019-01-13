@@ -30,6 +30,11 @@ class App extends Component {
           delay: 50
         },
         {
+          title:"Das ist der laengste Filmtitel auf der ganzen Welt - Reloaded & Director's Cut von 1989 in der DDR",
+          icon:"path/to/icon.png",
+          delay: 50
+        },
+        {
           title:"Schrecken einer Ehe 5",
           icon:"path/to/icon.png",
           delay: 250
@@ -60,6 +65,8 @@ class App extends Component {
     this.setCurrentPlaylist = this.setCurrentPlaylist.bind(this);
     this.addNewPlaylist = this.addNewPlaylist.bind(this);
     this.deletePlaylist = this.deletePlaylist.bind(this);
+    this.swapPlaylistIndices = this.swapPlaylistIndices.bind(this);
+    this.removePlaylistIndex = this.removePlaylistIndex.bind(this)
   }
 
   setCurrentPlaylist(index){
@@ -88,6 +95,40 @@ class App extends Component {
     }
   }
 
+  swapPlaylistIndices(lhsIndex, rhsIndex){
+
+    let movies = this.state.playlists[this.state.current_index].movies
+
+    // clamp indices
+    let numItems = movies.length;
+    lhsIndex = clamp(lhsIndex, 0, numItems - 1)
+    rhsIndex = clamp(rhsIndex, 0, numItems - 1)
+
+    // console.log("swap:" + lhsIndex + " <-> " + rhsIndex)
+
+    // do nothing for equal indices
+    if(lhsIndex !== rhsIndex){
+      // ES6 fancy swap with "Destructuring Assignment Array Matching"
+      [movies[lhsIndex], movies[rhsIndex]] = [movies[rhsIndex], movies[lhsIndex]]
+
+      let newState = this.state;
+      newState.playlists[newState.current_index].movies = movies
+      this.setState(newState)
+    }
+  }
+
+  removePlaylistIndex(index){
+    let movies = this.state.playlists[this.state.current_index].movies
+    console.log("remove playlist-item: " + index)
+    if(index >= 0 && index < movies.length){
+
+      movies.splice(index, 1)
+      let newState = this.state;
+      newState.playlists[newState.current_index].movies = movies
+      this.setState(newState)
+    }
+  }
+
   createAllMoviesList = ()=>{
     let allMovies = [];
     for (let i in this.state.movies){
@@ -111,6 +152,8 @@ class App extends Component {
           setPlaylistFn={this.setCurrentPlaylist}
           deletePlaylistFn={this.deletePlaylist}
           addNewPlaylistFn={this.addNewPlaylist}
+          swapPlaylistIndicesFn={this.swapPlaylistIndices}
+          removePlaylistIndexFn={this.removePlaylistIndex}
         />
         {/* <Movielist
           state = {this.state}
@@ -139,6 +182,10 @@ class App extends Component {
 export default App;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export function clamp(num, min, max) {
+  return num <= min ? min : num >= max ? max : num;
+}
 
 export function postData(url = ``, data = {}) {
   // Default options are marked with *

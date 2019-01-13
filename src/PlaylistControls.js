@@ -126,7 +126,7 @@ class PlaylistControls extends Component {
   render(){
     return(
       <div className="row playlistControls">
-        <div className="col-sm-2 col-2">
+        <div className="col-sm-3 col-3">
           <PlayListChooser
             state = {this.props.state}
             setPlaylistFn = {this.props.setPlaylistFn}

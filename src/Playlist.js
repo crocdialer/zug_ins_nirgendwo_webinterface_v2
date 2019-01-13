@@ -4,32 +4,58 @@ import PlaylistControls from './PlaylistControls.js'
 import './Playlist.css';
 
 function MovieItem(props){
+  let moveUpFn = ()=>{props.swapPlaylistIndicesFn(props.index, props.index - 1)}
+  let moveDownFn = ()=>{props.swapPlaylistIndicesFn(props.index, props.index + 1)}
+  let removeFn = ()=>{props.removePlaylistIndexFn(props.index)}
+
   return(
-    <div className="row playListItem">
-      <div className="col-sm-2 col-2">
+    <div className="row movieItem">
+      <div className="col-sm-2 col-2 movieThumb">
         thumb: {props.movie.icon}
       </div>
-      <div className="col-sm-10 col-10">{props.movie.title}</div>
+      <div className="col-sm-8 col-8 movieTitle">{props.movie.title}</div>
+
+      {/* movie placement and deletion*/}
+      {!props.isMainList &&
+        <div className="col-sm-2 col-2 moviePlacer">
+          <div className="row moviePlacer">
+            <div className="col-sm-4"><a href="#" onClick={moveUpFn}>up</a></div>
+            <div className="col-sm-4"><a href="#" onClick={moveDownFn}>down</a></div>
+            <div className="col-sm-4"><a href="#" onClick={removeFn}>remove</a></div>
+          </div>
+        </div>
+      }
+
+      {/* add to playlist */}
+      {props.isMainList &&
+        <div className="col-sm-1 col-1">
+          <a href="#">add to</a>
+        </div>
+      }
     </div>
   );
+}
+
+function MovieList(props){
+  let movies = props.movieList.map((movie, index)=>{
+    return(
+      <MovieItem
+        key={index}
+        index={index}
+        movie={movie}
+        isMainList = {props.isMainList}
+        swapPlaylistIndicesFn={props.swapPlaylistIndicesFn}
+        removePlaylistIndexFn={props.removePlaylistIndexFn}
+      />
+    );
+  });
+  return movies;
 }
 
 class Playlist extends Component {
 
   constructor(props){
     super(props);
-  }
-
-  renderMovieList(movieList){
-    let movies = movieList.map((movie, index)=>{
-      return(
-        <MovieItem
-          key={index}
-          movie={movie}
-        />
-      );
-    });
-    return movies;
   }
 
   createMovieObjectList(playlist){
@@ -57,6 +83,7 @@ class Playlist extends Component {
     let api_host = this.props.api_host;
     let currentPlaylist = this.props.state.playlists[this.props.state.current_index]
     let movieList = this.createMovieObjectList(currentPlaylist)
+    let isMainList = (this.props.state.current_index === 0);
 
     return (
       <div className="container playlist">
@@ -66,7 +93,13 @@ class Playlist extends Component {
           addNewPlaylistFn={this.props.addNewPlaylistFn}
           deletePlaylistFn={this.props.deletePlaylistFn}
         />
-        {this.renderMovieList(movieList)}
+        <MovieList
+          movieList = {movieList}
+          isMainList = {isMainList}
+          swapPlaylistIndicesFn={this.props.swapPlaylistIndicesFn}
+          removePlaylistIndexFn={this.props.removePlaylistIndexFn}
+        />
+        {/* {this.renderMovieList(movieList)} */}
       </div>
     );
   }
