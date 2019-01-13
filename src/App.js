@@ -59,14 +59,15 @@ class App extends Component {
     // this.eventSource.addEventListener('node', this.handleNodeEvent, false);
     // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
 
-    this.state.playlists.unshift({title: "All", movies: this.createAllMoviesList()});
+    this.state.playlists.unshift({title: "All Movies", movies: this.createAllMoviesList()});
 
     // function binding
     this.setCurrentPlaylist = this.setCurrentPlaylist.bind(this);
     this.addNewPlaylist = this.addNewPlaylist.bind(this);
     this.deletePlaylist = this.deletePlaylist.bind(this);
     this.swapPlaylistIndices = this.swapPlaylistIndices.bind(this);
-    this.removePlaylistIndex = this.removePlaylistIndex.bind(this)
+    this.removePlaylistIndex = this.removePlaylistIndex.bind(this);
+    this.addToPlaylist = this.addToPlaylist.bind(this);
   }
 
   setCurrentPlaylist(index){
@@ -92,6 +93,23 @@ class App extends Component {
       newState.playlists.splice(index, 1)
       newState.current_index = Math.min(newState.current_index, newState.playlists.length - 1)
       this.setState(newState)
+    }
+  }
+
+  addToPlaylist(movieTitle, playlistIndex){
+    let movieFound = false;
+    for(let i in this.state.movies){
+      if(this.state.movies[i].title == movieTitle){
+        movieFound = true;
+        break;
+      }
+    }
+    console.log("addToPlaylist: " + movieTitle + " -> playlist " + playlistIndex)
+
+    if(movieFound){
+      let newState = this.state;
+      newState.playlists[playlistIndex].movies.push(movieTitle);
+      this.setState(newState);
     }
   }
 
@@ -152,6 +170,7 @@ class App extends Component {
           setPlaylistFn={this.setCurrentPlaylist}
           deletePlaylistFn={this.deletePlaylist}
           addNewPlaylistFn={this.addNewPlaylist}
+          addToPlaylistFn={this.addToPlaylist}
           swapPlaylistIndicesFn={this.swapPlaylistIndices}
           removePlaylistIndexFn={this.removePlaylistIndex}
         />

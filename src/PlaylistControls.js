@@ -11,12 +11,12 @@ function PlayListChooserItem(props){
 
 function PlayListChooser(props){
 
-  let chooserItems = props.state.playlists.map((playlist, index)=>{
+  let chooserItems = props.playlists.map((playlist, index)=>{
       return(
         <PlayListChooserItem
           key = {index}
           title = {playlist.title}
-          onClick = {()=>{props.setPlaylistFn(index)}}
+          onClick = {()=>{props.selectItemFn(index)}}
         />
       );
   });
@@ -24,7 +24,7 @@ function PlayListChooser(props){
   return(
     <div className="dropdown">
       <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {props.state.playlists[props.state.current_index].title}
+        {props.displayText}
       </button>
       <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
         {chooserItems}
@@ -128,8 +128,9 @@ class PlaylistControls extends Component {
       <div className="row playlistControls">
         <div className="col-sm-3 col-3">
           <PlayListChooser
-            state = {this.props.state}
-            setPlaylistFn = {this.props.setPlaylistFn}
+            displayText = {this.props.state.playlists[this.props.state.current_index].title}
+            playlists = {this.props.state.playlists}
+            selectItemFn = {this.props.setPlaylistFn}
           />
         </div>
         <div className="col-sm-2 col-2">
@@ -150,3 +151,4 @@ class PlaylistControls extends Component {
 }
 
 export default PlaylistControls;
+export {PlayListChooser}
