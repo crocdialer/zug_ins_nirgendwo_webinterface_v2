@@ -1,14 +1,17 @@
 .transport_button {
-  background-color: #2250AF;
-  border: none;
+  background-color: #00000000;
+  border: solid;
+  border-radius: 20px;
+  border-width: 2px;
+  border-color: white;
   color: white;
   padding: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 38px;
+  font-weight: bold;
   margin: 4px 2px;
-  border-radius: 10px;
 }
 
 .playbackComponent{

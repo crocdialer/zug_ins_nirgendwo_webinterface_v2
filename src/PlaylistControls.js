@@ -43,7 +43,7 @@ function PlayListAddNew(props){
     <div>
       {/* Button trigger modal */}
       <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#newPlaylistModal">
-        Add playlist
+        add
       </button>
 
       {/* Modal */}
@@ -51,7 +51,7 @@ function PlayListAddNew(props){
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="newPlaylistModalLabel">enter a name for the new playlist ...</h5>
+              <h5 className="modal-title" id="newPlaylistModalLabel">enter a name for the new playlist</h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -59,7 +59,7 @@ function PlayListAddNew(props){
             <div className="modal-body">
               <form>
                 <div className="form-group">
-                  <input type="text" className="form-control" id={title_input_id} placeholder="enter title ..."/>
+                  <input type="text" className="form-control" id={title_input_id} placeholder="enter name ..."/>
                 </div>
               </form>
             </div>
@@ -85,7 +85,7 @@ function PlayListDelete(props){
       {/* Button trigger modal */}
       <button type="button" className="btn btn-primary" data-toggle="modal" disabled={isDisabled}
         data-target="#deletePlaylistModal">
-        Delete playlist
+        delete
       </button>
 
       {/* Modal */}
@@ -95,7 +95,7 @@ function PlayListDelete(props){
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="deletePlaylistModalLabel">
-                {props.state.playlists[props.state.current_index].title} will be deleted ...
+                "{props.state.playlists[props.state.current_index].title}" will be deleted ...
               </h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -133,13 +133,13 @@ class PlaylistControls extends Component {
             selectItemFn = {this.props.setPlaylistFn}
           />
         </div>
-        <div className="col-sm-2 col-2">
+        <div className="col-sm-1 col-1">
           <PlayListAddNew
             state = {this.props.state}
             addNewPlaylistFn = {this.props.addNewPlaylistFn}
           />
         </div>
-        <div className="col-sm-2 col-2">
+        <div className="col-sm-1 col-1">
           <PlayListDelete
             state = {this.props.state}
             deletePlaylistFn = {this.props.deletePlaylistFn}

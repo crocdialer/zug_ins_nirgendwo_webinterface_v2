@@ -20,23 +20,23 @@ function PlaybackComponent(props){
           {/* spacer */}
           <div className="col-sm-1 col-1"/>
           <PlaybackButton
-            title="prev"
+            title="<"
             handler={dummyHandler}
           />
           <PlaybackButton
-            title="rewind"
+            title="<<"
             handler={dummyHandler}
           />
           <PlaybackButton
-            title="play"
+            title="&#9654; ||"
             handler={dummyHandler}
           />
           <PlaybackButton
-            title="ffd"
+            title=">>"
             handler={dummyHandler}
           />
           <PlaybackButton
-            title="next"
+            title=">"
             handler={dummyHandler}
           />
           {/* spacer */}

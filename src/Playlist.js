@@ -15,7 +15,7 @@ function MovieItem(props){
     <div className="row movieItem">
       <div className="col-sm-2 col-2 movieThumb">
         {/* thumb: {props.movie.icon} */}
-        <img src="img/default_icon.jpg" class="img-fluid" alt={props.movie.icon}/>
+        <img src="img/default_icon.jpg" className="img-fluid movieThumb" alt={props.movie.icon}/>
       </div>
       <div className="col-sm-8 col-8 movieTitle">{props.movie.title}</div>
 
