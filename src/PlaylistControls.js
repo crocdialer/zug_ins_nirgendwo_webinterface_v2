@@ -1,4 +1,4 @@
-import {postData, nodeCommand} from './App.js'
+import {playerCommand} from './App.js'
 import React, { Component } from 'react';
 import $ from 'jquery';
 import './PlaylistControls.css';
@@ -42,7 +42,7 @@ function PlayListAddNew(props){
   return(
     <div>
       {/* Button trigger modal */}
-      <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#newPlaylistModal">
+      <button type="button" className="btn btn-secondary" data-toggle="modal" data-target="#newPlaylistModal">
         add
       </button>
 
@@ -83,7 +83,7 @@ function PlayListDelete(props){
   return(
     <div>
       {/* Button trigger modal */}
-      <button type="button" className="btn btn-primary" data-toggle="modal" disabled={isDisabled}
+      <button type="button" className="btn btn-secondary" data-toggle="modal" disabled={isDisabled}
         data-target="#deletePlaylistModal">
         delete
       </button>

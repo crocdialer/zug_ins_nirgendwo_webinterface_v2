@@ -6,43 +6,33 @@ import Playlist from './Playlist';
 import Movielist from './Movielist';
 
 var api_host = "http://" + window.location.hostname +
-  ( (window.location.port === 3000)  ? ":8080" : (":" + window.location.port))
+  ( (window.location.port == 3000)  ? ":8080" : (":" + window.location.port))
 
 class App extends Component {
 
   state =
   {
-      current_index : 1,
+      current_index : 0,
+
+      playState : {
+        playlist_index : -1,
+        movie_index : -1,
+        position : 0.0,
+        duration : 0.0,
+        rate : 1.0,
+        volume : 1.0,
+        playing: false
+      },
+
       playlists: [
         {
-          title: "playlist_01",
-          movies:["Reise nach Poopmandoo"]
-        },
-        {
-          title: "playlist_02",
-          movies:["Schrecken einer Ehe 5", "Tufftufftuff die Eisenbahn"]
-        }
-      ],
-      movies:[
-        {
-          title:"Reise nach Poopmandoo",
-          icon:"path/to/icon.png",
-          delay: 50
-        },
-        {
-          title:"Das ist der laengste Filmtitel auf der ganzen Welt - Reloaded & Director's Cut von 1989 in der DDR",
-          icon:"path/to/icon.png",
-          delay: 50
-        },
-        {
-          title:"Schrecken einer Ehe 5",
-          icon:"path/to/icon.png",
-          delay: 250
-        },
-        {
-          title:"Tufftufftuff die Eisenbahn",
-          icon:"path/to/icon.png",
-          delay: -50
+          title: "All Movies",
+          movies:[
+            // {
+            //   path:"/path/to/Reise nach Poopmandoo.mp4",
+            //   icon:""
+            // }
+          ]
         }
       ]
   };
@@ -51,29 +41,66 @@ class App extends Component {
     super(props);
     this.api_host = api_host
 
-    // register event-stream
-    this.eventSource = new EventSource(this.api_host + "/events")
-
-    // fires only for unnamed events
-    // this.eventSource.onmessage = this.handleSSE
-    // this.eventSource.addEventListener('node', this.handleNodeEvent, false);
-    // this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
-
-    this.state.playlists.unshift({title: "All Movies", movies: this.createAllMoviesList()});
+    // this.state.playlists.unshift({title: "All Movies", movies: this.createAllMoviesList()});
 
     // function binding
+    this.handleCommandACK = this.handleCommandACK.bind(this)
+    this.handlePlayStateEvent = this.handlePlayStateEvent.bind(this)
     this.setCurrentPlaylist = this.setCurrentPlaylist.bind(this);
     this.addNewPlaylist = this.addNewPlaylist.bind(this);
     this.deletePlaylist = this.deletePlaylist.bind(this);
     this.swapPlaylistIndices = this.swapPlaylistIndices.bind(this);
     this.removePlaylistIndex = this.removePlaylistIndex.bind(this);
     this.addToPlaylist = this.addToPlaylist.bind(this);
+    this.onPlaylistsModified = this.onPlaylistsModified.bind(this);
+
+    // register event-stream
+    this.eventSource = new EventSource(this.api_host + "/events")
+
+    // fires only for unnamed events
+    // this.eventSource.onmessage = this.handleSSE
+    this.eventSource.addEventListener('commandACK', this.handleCommandACK, false);
+    this.eventSource.addEventListener('playstate', this.handlePlayStateEvent, false);
+  }
+
+  handleCommandACK(e){
+    // {"command":{"id":2,"cmd":"toggle_pause","arg":[]},"success":true,"value":null}
+
+      let ack = JSON.parse(e.data)
+      console.log(ack)
+
+      if(ack.command.cmd == "playstate"){
+        let ps = JSON.parse(ack.value)
+        // console.log(ps)
+        this.setState({playState: ps})
+      }
+  }
+
+  handlePlayStateEvent(e){
+    let ps = JSON.parse(e.data)
+    // console.log(e.data)
+    this.setState({playState: ps});
   }
 
   setCurrentPlaylist(index){
       if(index >= 0 && index < this.state.playlists.length){
         // console.log("setCurrentPlaylist: " + index)
         this.setState(Object.assign(this.state, {current_index: index}));
+
+        //this.state.playState.playlist_index
+
+        // send playlist to media_player
+        // let compList = [{
+        //   name: "media_player",
+        //   properties:[
+        //     {
+        //       name : "playlist",
+        //       type : "string_array",
+        //       value : this.state.playlists[index].movies
+        //     }
+        //   ]
+        // }]
+        // console.log(compList)
       }
   }
 
@@ -82,35 +109,34 @@ class App extends Component {
     let newState = this.state;
     newState.playlists.push({title: title, movies:[]})
     this.setState(newState)
+
+    // send changes to backend
+    this.onPlaylistsModified();
   }
 
   deletePlaylist(index){
     console.log("deletePlaylist:\n" + index)
 
-    // skip first entry (implicit "All" playlist)
+    // skip first entry (do not delete "All Movies" playlist)
     if(index >= 1 && index < this.state.playlists.length){
       let newState = this.state;
       newState.playlists.splice(index, 1)
       newState.current_index = Math.min(newState.current_index, newState.playlists.length - 1)
       this.setState(newState)
     }
+
+    // send changes to backend
+    this.onPlaylistsModified();
   }
 
-  addToPlaylist(movieTitle, playlistIndex){
-    let movieFound = false;
-    for(let i in this.state.movies){
-      if(this.state.movies[i].title == movieTitle){
-        movieFound = true;
-        break;
-      }
-    }
-    console.log("addToPlaylist: " + movieTitle + " -> playlist " + playlistIndex)
+  addToPlaylist(movieObj, playlistIndex){
+    console.log("addToPlaylist: " + movieObj + " -> playlist " + playlistIndex)
+    let newState = this.state;
+    newState.playlists[playlistIndex].movies.push(movieObj);
+    this.setState(newState);
 
-    if(movieFound){
-      let newState = this.state;
-      newState.playlists[playlistIndex].movies.push(movieTitle);
-      this.setState(newState);
-    }
+    // send changes to backend
+    this.onPlaylistsModified();
   }
 
   swapPlaylistIndices(lhsIndex, rhsIndex){
@@ -133,6 +159,9 @@ class App extends Component {
       newState.playlists[newState.current_index].movies = movies
       this.setState(newState)
     }
+
+    // send changes to backend
+    this.onPlaylistsModified();
   }
 
   removePlaylistIndex(index){
@@ -145,14 +174,13 @@ class App extends Component {
       newState.playlists[newState.current_index].movies = movies
       this.setState(newState)
     }
+
+    // send changes to backend
+    this.onPlaylistsModified();
   }
 
-  createAllMoviesList = ()=>{
-    let allMovies = [];
-    for (let i in this.state.movies){
-      allMovies.push(this.state.movies[i].title)
-    }
-    return allMovies;
+  onPlaylistsModified(){
+    postData(api_host + "/playlists", this.state.playlists)
   }
 
   render() {
@@ -163,6 +191,7 @@ class App extends Component {
         />
         <PlaybackComponent
           api_host={this.api_host}
+          playState={this.state.playState}
         />
         <Playlist
           api_host={this.api_host}
@@ -174,22 +203,26 @@ class App extends Component {
           swapPlaylistIndicesFn={this.swapPlaylistIndices}
           removePlaylistIndexFn={this.removePlaylistIndex}
         />
-        {/* <Movielist
-          state = {this.state}
-        /> */}
       </div>
     );
   }
 
   update = () => {
-      fetch(this.api_host + "/movies")
-        .then(response => response.json())
-        .then(nodeList => this.setState({ nodeList }))
-        .catch(error => console.error(error));
+
+    fetch(this.api_host + "/playlists")
+      .then(response => response.json())
+      .then(playlists => this.setState({ playlists }))
+      .catch(error => console.error(error));
+
+    // playbackstate
+    fetch(this.api_host + "/playstate")
+      .then(response => response.json())
+      .then(playState => this.setState({ playState }))
+      .catch(error => console.error(error));
   }
 
   componentDidMount() {
-    // this.update();
+    this.update();
     // this.interval = setInterval(this.update, 1000);
   }
 
@@ -225,6 +258,6 @@ export function postData(url = ``, data = {}) {
     .catch(error => console.error(error));
 }
 
-export function nodeCommand(dst = 0, command = "", args = []){
-    postData(api_host + "/nodes/cmd", {dst : dst, cmd : command, arg: args})
+export function playerCommand(command = "", args = []){
+    postData(api_host + "/cmd", {cmd : command, arg: args})
 }

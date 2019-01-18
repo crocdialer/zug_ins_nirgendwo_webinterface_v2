@@ -1,4 +1,4 @@
-import {postData, nodeCommand} from './App.js'
+import {playerCommand} from './App.js'
 import React, { Component } from 'react';
 import PlaylistControls, {PlayListChooser} from './PlaylistControls.js'
 import './Playlist.css';
@@ -9,15 +9,22 @@ function MovieItem(props){
   let removeFn = ()=>{props.removePlaylistIndexFn(props.index)}
 
   // skip first index
-  let addItemFn = (index)=>{props.addToPlaylistFn(props.movie.title, index + 1)}
+  let addItemFn = (index)=>{props.addToPlaylistFn(props.movie, index + 1)}
+
+  // thumbnail
+  let icon_src = props.movie.icon.length == 0 ? "img/default_icon.jpg" : props.movie.icon
+  let iconClickHandler = ()=>{
+    console.log("clicked: " + props.movie.path)
+    playerCommand("play", [props.movie.path])
+  }
 
   return(
     <div className="row movieItem">
       <div className="col-sm-2 col-2 movieThumb">
         {/* thumb: {props.movie.icon} */}
-        <img src="img/default_icon.jpg" className="img-fluid movieThumb" alt={props.movie.icon}/>
+        <img onClick={iconClickHandler} src={icon_src} className="img-fluid movieThumb" alt={props.movie.icon}/>
       </div>
-      <div className="col-sm-8 col-8 movieTitle">{props.movie.title}</div>
+      <div className="col-sm-8 col-8 movieTitle">{props.movie.path}</div>
 
       {/* movie placement and deletion*/}
       {!props.isMainList &&
@@ -68,31 +75,35 @@ class Playlist extends Component {
     super(props);
   }
 
-  createMovieObjectList(playlist){
-    let retList = []
-
-    for(let i in playlist.movies){
-
-      let movieTitle = playlist.movies[i]
-      // console.log(movieTitle)
-
-      // lookup movie_obj by title
-      for (let j in this.props.state.movies){
-        let movieObj = this.props.state.movies[j]
-
-          if(movieObj.title == movieTitle){
-            retList.push(movieObj);
-            break;
-          }
-      }
-    }
-    return retList;
-  }
+  // createMovieObjectList(playlist){
+  //   let retList = []
+  //
+  //   for(let i in playlist.movies){
+  //
+  //     let moviePath = playlist.movies[i]
+  //     // console.log(movieTitle)
+  //
+  //     // lookup movie_obj by title
+  //     for (let j in this.props.state.movies){
+  //       let movieObj = this.props.state.movies[j]
+  //
+  //         if(movieObj.path == moviePath){
+  //           retList.push(movieObj);
+  //           break;
+  //         }
+  //     }
+  //   }
+  //   return retList;
+  // }
 
   render() {
     let api_host = this.props.api_host;
-    let currentPlaylist = this.props.state.playlists[this.props.state.current_index]
-    let movieList = this.createMovieObjectList(currentPlaylist)
+    let currentPlaylist = this.props.state.playlists.length > this.props.state.current_index ?
+      this.props.state.playlists[this.props.state.current_index] : []
+    // let movieList = this.createMovieObjectList(currentPlaylist)
+    // console.log(this.props.state.playlists)
+
+    let movieList = currentPlaylist.movies
     let isMainList = (this.props.state.current_index === 0);
 
     return (
