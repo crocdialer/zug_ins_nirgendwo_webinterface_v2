@@ -1,4 +1,4 @@
-// import $ from 'jquery';
+import $ from 'jquery';
 import {postData, nodeCommand} from './App.js'
 import React, { Component } from 'react';
 import './NavBar.css';
@@ -14,6 +14,11 @@ function NodeMenuItem(props){
 class NavBar extends Component {
   render() {
     let api_host = this.props.api_host;
+    let saveFn = ()=>{$.get(api_host + "/save");}
+    let loadFn = ()=>{
+      $.get(api_host + "/load");
+      this.props.updateFn();
+    }
 
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -26,15 +31,11 @@ class NavBar extends Component {
           <ul className="navbar-nav mr-auto">
 
             <li className="nav-item">
-              <a className="nav-link" href="/">save</a>
+              <a className="nav-link" href="#" onClick={saveFn}>save</a>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/">load</a>
-            </li>
-            
-            <li className="nav-item">
-              <a className="nav-link disabled" href="/">Disabled</a>
+              <a className="nav-link" href="#" onClick={loadFn}>load</a>
             </li>
           </ul>
         </div>

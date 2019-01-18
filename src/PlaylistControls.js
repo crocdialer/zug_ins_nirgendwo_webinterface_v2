@@ -79,7 +79,8 @@ function PlayListDelete(props){
 
   let isDisabled = props.state.current_index === 0;
   let deleteFn = ()=>{ props.deletePlaylistFn(props.state.current_index) }
-
+  let pl = props.state.playlists[props.state.current_index]
+  let playlistTitle = pl ? pl.title : "undefined"
   return(
     <div>
       {/* Button trigger modal */}
@@ -95,7 +96,7 @@ function PlayListDelete(props){
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="deletePlaylistModalLabel">
-                "{props.state.playlists[props.state.current_index].title}" will be deleted ...
+                "{playlistTitle}" will be deleted ...
               </h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -124,11 +125,16 @@ class PlaylistControls extends Component {
   }
 
   render(){
+
+    let chooserText = "choose playlist"
+    if(this.props.state.playlists.length > this.props.state.current_index){
+      chooserText = this.props.state.playlists[this.props.state.current_index].title
+    }
     return(
       <div className="row playlistControls">
         <div className="col-sm-3 col-3">
           <PlayListChooser
-            displayText = {this.props.state.playlists[this.props.state.current_index].title}
+            displayText = {chooserText}
             playlists = {this.props.state.playlists}
             selectItemFn = {this.props.setPlaylistFn}
           />

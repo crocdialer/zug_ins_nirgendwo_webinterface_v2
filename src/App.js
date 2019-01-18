@@ -86,21 +86,6 @@ class App extends Component {
       if(index >= 0 && index < this.state.playlists.length){
         // console.log("setCurrentPlaylist: " + index)
         this.setState(Object.assign(this.state, {current_index: index}));
-
-        //this.state.playState.playlist_index
-
-        // send playlist to media_player
-        // let compList = [{
-        //   name: "media_player",
-        //   properties:[
-        //     {
-        //       name : "playlist",
-        //       type : "string_array",
-        //       value : this.state.playlists[index].movies
-        //     }
-        //   ]
-        // }]
-        // console.log(compList)
       }
   }
 
@@ -180,7 +165,7 @@ class App extends Component {
   }
 
   onPlaylistsModified(){
-    postData(api_host + "/playlists", this.state.playlists)
+    postData(api_host + "/playlists", this.state.playlists.slice(1))
   }
 
   render() {
@@ -188,6 +173,7 @@ class App extends Component {
       <div className="zug_ins_nirgendwo_ui">
         <NavBar
           api_host={this.api_host}
+          updateFn={this.update}
         />
         <PlaybackComponent
           api_host={this.api_host}
