@@ -4,3 +4,7 @@
     border-width: 0px 0px 2px 0px;
     padding: 10px 0px;
 }
+
+.chooserItem.active{
+    background-color: orange;
+}

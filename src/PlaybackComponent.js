@@ -2,8 +2,17 @@ import {playerCommand} from './App.js'
 import React, { Component } from 'react';
 import './PlaybackComponent.css';
 
-function rewind(secs){
+function secsToTimeString(secs){
+  // var sec_num = parseInt(this, 10); // don't forget the second param
+    secs = Math.floor(secs);
+    var hours   = Math.floor(secs / 3600);
+    var minutes = Math.floor((secs - (hours * 3600)) / 60);
+    var seconds = secs - (hours * 3600) - (minutes * 60);
 
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+seconds;
 }
 
 function PlaybackButton(props){
@@ -61,6 +70,13 @@ class PlaybackComponent extends Component {
           />
           {/* spacer */}
           <div className="col-sm-1 col-1"/>
+        </div>
+        <div className="row">
+          <div className="col-sm-12 col-12">
+            <p className="timeDisplay">
+              {secsToTimeString(this.props.playState.position)} / {secsToTimeString(this.props.playState.duration)}
+            </p>
+          </div>
         </div>
       </div>
     );

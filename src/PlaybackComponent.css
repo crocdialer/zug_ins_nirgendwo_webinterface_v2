@@ -18,3 +18,12 @@
 .playbackComponent{
     border: solid 0px 0px 2px 0px;
 }
+
+.modal-content{
+    background-color: #333333;
+}
+
+.timeDisplay{
+    text-align: center;
+    font-size: 3vw;
+}

@@ -18,13 +18,21 @@ function MovieItem(props){
     props.playbackFn(props.index, props.playlistIndex)
   }
 
+  let movieItemClass = "row movieItem"
+  if(props.active){
+    movieItemClass += " active"
+  }
+
+  let movieTitle = props.movie.path.substring(props.movie.path.lastIndexOf('/') + 1);
+  movieTitle = movieTitle.substring(0, movieTitle.lastIndexOf('.'))
+
   return(
-    <div className="row movieItem">
+    <div className={movieItemClass}>
       <div className="col-sm-2 col-2 movieThumb">
         {/* thumb: {props.movie.icon} */}
         <img onClick={iconClickHandler} src={icon_src} className="img-fluid movieThumb" alt={props.movie.icon}/>
       </div>
-      <div className="col-sm-8 col-8 movieTitle">{props.movie.path}</div>
+      <div className="col-sm-8 col-8 movieTitle">{movieTitle}</div>
 
       {/* movie placement and deletion*/}
       {!props.isMainList &&
@@ -44,6 +52,7 @@ function MovieItem(props){
             displayText = "add to"
             playlists = {props.playlists}
             selectItemFn = {addItemFn}
+            alignRight = {true}
           />
         </div>
       }
@@ -61,6 +70,7 @@ function MovieList(props){
         key={index}
         index={index}
         playlistIndex={props.playlistIndex}
+        active={props.isSelected && (index === props.movieIndex)}
         movie={movie}
         playlists = {props.playlists.slice(1)}
         isMainList = {props.isMainList}
@@ -90,8 +100,6 @@ class Playlist extends Component {
     let api_host = this.props.api_host;
     let currentPlaylist = this.props.state.playlists.length > this.props.state.current_index ?
       this.props.state.playlists[this.props.state.current_index] : []
-
-    let movieList = currentPlaylist.movies
     let isMainList = (this.props.state.current_index === 0);
 
     return (
@@ -104,8 +112,10 @@ class Playlist extends Component {
         />
         <MovieList
           playlists = {this.props.state.playlists}
-          movieList = {movieList}
+          movieList = {currentPlaylist.movies}
+          movieIndex = {this.props.state.playState.movie_index}
           playlistIndex={this.props.state.current_index}
+          isSelected={this.props.state.current_index === this.props.state.playState.playlist_index}
           isMainList = {isMainList}
           swapPlaylistIndicesFn={this.props.swapPlaylistIndicesFn}
           removePlaylistIndexFn={this.props.removePlaylistIndexFn}

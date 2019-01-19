@@ -5,7 +5,7 @@ import './PlaylistControls.css';
 
 function PlayListChooserItem(props){
   return(
-    <a className="dropdown-item" href="#" onClick={props.onClick}>{props.title}</a>
+    <a className={"dropdown-item chooserItem" + (props.active ? " active" : "")} href="#" onClick={props.onClick}>{props.title}</a>
   );
 }
 
@@ -16,17 +16,24 @@ function PlayListChooser(props){
         <PlayListChooserItem
           key = {index}
           title = {playlist.title}
+          active = {props.activeIndex === index}
           onClick = {()=>{props.selectItemFn(index)}}
         />
       );
   });
+
+  let dropDownClass = "dropdown-menu"
+
+  if(props.alignRight){
+    dropDownClass += " dropdown-menu-right"
+  }
 
   return(
     <div className="dropdown">
       <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {props.displayText}
       </button>
-      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <div className={dropDownClass} aria-labelledby="dropdownMenuButton">
         {chooserItems}
       </div>
     </div>
@@ -135,6 +142,7 @@ class PlaylistControls extends Component {
         <div className="col-sm-3 col-3">
           <PlayListChooser
             displayText = {chooserText}
+            activeIndex = {this.props.state.playState.playlist_index}
             playlists = {this.props.state.playlists}
             selectItemFn = {this.props.setPlaylistFn}
           />
