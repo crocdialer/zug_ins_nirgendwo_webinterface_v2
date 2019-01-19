@@ -4,7 +4,7 @@ import './PlaybackComponent.css';
 
 function secsToTimeString(secs){
   // var sec_num = parseInt(this, 10); // don't forget the second param
-    secs = Math.floor(secs);
+    secs = Math.round(secs);
     var hours   = Math.floor(secs / 3600);
     var minutes = Math.floor((secs - (hours * 3600)) / 60);
     var seconds = secs - (hours * 3600) - (minutes * 60);
@@ -18,10 +18,11 @@ function secsToTimeString(secs){
 function PlaybackButton(props){
   // title, handler
   let clickHandler = props.handler//()=>{console.log("button: " + props.title);}
-
+  let transportClass = "transport_button" + (props.active ? " active" : "")
+  
   return(
     <div className="col-sm-2 col-2">
-      <button className="transport_button" onClick={clickHandler}>{props.title}</button>
+      <button className={transportClass} onClick={clickHandler}>{props.title}</button>
     </div>);
 }
 
@@ -59,10 +60,12 @@ class PlaybackComponent extends Component {
           <PlaybackButton
             title="&#9654;||"
             handler={this.playPause}
+            active={this.props.playState.playing}
           />
           <PlaybackButton
             title=">>"
             handler={this.fastForward}
+            active={this.props.playState.rate != 1}
           />
           <PlaybackButton
             title=">"

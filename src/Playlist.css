@@ -6,8 +6,8 @@
 }
 
 .movieItem.active{
-    border-width: 0px 3px 3px 3px;
-    border-color: orange;
+    border-color: white orange white orange;
+    border-width: 0px 5px 2px 5px;
 }
 
 .moviePlacer a{

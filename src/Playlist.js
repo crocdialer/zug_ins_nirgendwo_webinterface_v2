@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import PlaylistControls, {PlayListChooser} from './PlaylistControls.js'
 import './Playlist.css';
 
+var api_host = "http://" + window.location.hostname +
+  ( (window.location.port == 3000)  ? ":8080" : (":" + window.location.port))
+
 function MovieItem(props){
   let moveUpFn = ()=>{props.swapPlaylistIndicesFn(props.index, props.index - 1)}
   let moveDownFn = ()=>{props.swapPlaylistIndicesFn(props.index, props.index + 1)}
@@ -12,7 +15,7 @@ function MovieItem(props){
   let addItemFn = (index)=>{props.addToPlaylistFn(props.movie, index + 1)}
 
   // thumbnail
-  let icon_src = props.movie.icon.length == 0 ? "img/default_icon.jpg" : props.movie.icon
+  let icon_src = props.movie.icon.length == 0 ? "img/default_icon.jpg" : (api_host + props.movie.icon)
   let iconClickHandler = ()=>{
     console.log("clicked: " + props.movie.path)
     props.playbackFn(props.index, props.playlistIndex)
@@ -28,11 +31,11 @@ function MovieItem(props){
 
   return(
     <div className={movieItemClass}>
-      <div className="col-sm-2 col-2 movieThumb">
+      <div className="col-sm-3 col-3 movieThumb">
         {/* thumb: {props.movie.icon} */}
         <img onClick={iconClickHandler} src={icon_src} className="img-fluid movieThumb" alt={props.movie.icon}/>
       </div>
-      <div className="col-sm-8 col-8 movieTitle">{movieTitle}</div>
+      <div className="col-sm-7 col-7 movieTitle">{movieTitle}</div>
 
       {/* movie placement and deletion*/}
       {!props.isMainList &&

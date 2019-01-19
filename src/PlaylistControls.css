@@ -7,4 +7,5 @@
 
 .chooserItem.active{
     background-color: orange;
+    color: #333333;
 }
