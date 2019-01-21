@@ -22,6 +22,7 @@
 
 .playbackComponent{
     border: solid 0px 0px 2px 0px;
+    margin-top: 20px;
 }
 
 .modal-content{
@@ -37,4 +38,10 @@
 .timeDisplay{
     text-align: center;
     font-size: 3vw;
+    margin-bottom: 0px;
+}
+
+.titleDisplay{
+    text-align: center;
+    font-size: 2vw;
 }

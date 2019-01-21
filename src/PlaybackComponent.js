@@ -19,7 +19,7 @@ function PlaybackButton(props){
   // title, handler
   let clickHandler = props.handler//()=>{console.log("button: " + props.title);}
   let transportClass = "transport_button" + (props.active ? " active" : "")
-  
+
   return(
     <div className="col-sm-2 col-2">
       <button className={transportClass} onClick={clickHandler}>{props.title}</button>
@@ -42,7 +42,17 @@ class PlaybackComponent extends Component {
     playerCommand("set_rate", [rate]);
   }
 
+  // fast backward (-10x)
+  fastBackward = ()=>{
+    let rate = (this.props.playState.rate == 1 ? -10 : 1)
+    playerCommand("set_rate", [rate]);
+  }
+
+
   render(){
+
+    let movieTitle = this.props.playState.path.substring(this.props.playState.path.lastIndexOf('/') + 1);
+    movieTitle = movieTitle.substring(0, movieTitle.lastIndexOf('.'))
 
     return(
       <div className="container playbackComponent">
@@ -55,7 +65,9 @@ class PlaybackComponent extends Component {
           />
           <PlaybackButton
             title="<<"
-            handler={()=>{playerCommand("skip", [-10.0]);}}
+            // handler={()=>{playerCommand("skip", [-10.0]);}}
+            handler={this.fastBackward}
+            active={this.props.playState.rate < 1}
           />
           <PlaybackButton
             title="&#9654;||"
@@ -65,7 +77,7 @@ class PlaybackComponent extends Component {
           <PlaybackButton
             title=">>"
             handler={this.fastForward}
-            active={this.props.playState.rate != 1}
+            active={this.props.playState.rate > 1}
           />
           <PlaybackButton
             title=">"
@@ -78,6 +90,9 @@ class PlaybackComponent extends Component {
           <div className="col-sm-12 col-12">
             <p className="timeDisplay">
               {secsToTimeString(this.props.playState.position)} / {secsToTimeString(this.props.playState.duration)}
+            </p>
+            <p className="titleDisplay">
+              {movieTitle}
             </p>
           </div>
         </div>

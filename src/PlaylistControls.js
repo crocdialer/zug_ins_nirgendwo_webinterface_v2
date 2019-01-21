@@ -147,12 +147,14 @@ class PlaylistControls extends Component {
             selectItemFn = {this.props.setPlaylistFn}
           />
         </div>
+        <div className="col-sm-1 col-1"/>
         <div className="col-sm-1 col-1">
           <PlayListAddNew
             state = {this.props.state}
             addNewPlaylistFn = {this.props.addNewPlaylistFn}
           />
         </div>
+        <div className="col-sm-1 col-1"/>
         <div className="col-sm-1 col-1">
           <PlayListDelete
             state = {this.props.state}

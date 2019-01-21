@@ -18,7 +18,13 @@ function MovieItem(props){
   let icon_src = props.movie.icon.length == 0 ? "img/default_icon.jpg" : (api_host + props.movie.icon)
   let iconClickHandler = ()=>{
     console.log("clicked: " + props.movie.path)
-    props.playbackFn(props.index, props.playlistIndex)
+
+    if(props.playlistIndex === 0){
+      playerCommand("play", [props.movie.path])
+    }
+    else{
+      props.playbackFn(props.index, props.playlistIndex)
+    }
   }
 
   let movieItemClass = "row movieItem"
@@ -35,7 +41,9 @@ function MovieItem(props){
         {/* thumb: {props.movie.icon} */}
         <img onClick={iconClickHandler} src={icon_src} className="img-fluid movieThumb" alt={props.movie.icon}/>
       </div>
-      <div className="col-sm-7 col-7 movieTitle">{movieTitle}</div>
+      <div className="col-sm-7 col-7 movieTitle">
+        <p>{movieTitle}</p>
+      </div>
 
       {/* movie placement and deletion*/}
       {!props.isMainList &&

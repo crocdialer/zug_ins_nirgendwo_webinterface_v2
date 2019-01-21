@@ -15,6 +15,7 @@ class App extends Component {
       current_index : 0,
 
       playState : {
+        path: "",
         playlist_index : -1,
         movie_index : -1,
         position : 0.0,
@@ -116,9 +117,9 @@ class App extends Component {
 
   addToPlaylist(movieObj, playlistIndex){
     console.log("addToPlaylist: " + movieObj + " -> playlist " + playlistIndex)
-    let newState = this.state;
-    newState.playlists[playlistIndex].movies.push(movieObj);
-    this.setState(newState);
+    let playlists = this.state.playlists;
+    playlists[playlistIndex].movies.push(movieObj);
+    this.setState({playlists: playlists});
 
     // send changes to backend
     this.onPlaylistsModified();
