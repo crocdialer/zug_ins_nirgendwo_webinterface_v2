@@ -65,9 +65,9 @@ class PlaybackComponent extends Component {
           />
           <PlaybackButton
             title="<<"
-            // handler={()=>{playerCommand("skip", [-10.0]);}}
-            handler={this.fastBackward}
-            active={this.props.playState.rate < 1}
+            handler={()=>{playerCommand("skip", [-10.0]);}}
+            // handler={this.fastBackward}
+            // active={this.props.playState.rate < 1}
           />
           <PlaybackButton
             title="&#9654;||"
