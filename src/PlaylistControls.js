@@ -134,8 +134,9 @@ class PlaylistControls extends Component {
   render(){
 
     let chooserText = "choose playlist"
-    if(this.props.state.playlists.length > this.props.state.current_index){
-      chooserText = this.props.state.playlists[this.props.state.current_index].title
+    let current_index = this.props.state.current_index >= 0 ? this.props.state.current_index : 0
+    if(this.props.state.playlists.length > current_index){
+      chooserText = this.props.state.playlists[current_index].title
     }
     return(
       <div className="row playlistControls">

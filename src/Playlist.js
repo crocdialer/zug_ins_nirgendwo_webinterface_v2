@@ -109,8 +109,9 @@ class Playlist extends Component {
 
   render() {
     let api_host = this.props.api_host;
-    let currentPlaylist = this.props.state.playlists.length > this.props.state.current_index ?
-      this.props.state.playlists[this.props.state.current_index] : []
+    let current_index = this.props.state.current_index >= 0 ? this.props.state.current_index : 0
+    let currentPlaylist = this.props.state.playlists.length > current_index ?
+      this.props.state.playlists[current_index] : []
     let isMainList = (this.props.state.current_index === 0);
 
     return (
@@ -123,7 +124,7 @@ class Playlist extends Component {
         />
         <MovieList
           playlists = {this.props.state.playlists}
-          movieList = {currentPlaylist.movies}
+          movieList = {currentPlaylist ? currentPlaylist.movies : []}
           movieIndex = {this.props.state.playState.movie_index}
           playlistIndex={this.props.state.current_index}
           isSelected={this.props.state.current_index === this.props.state.playState.playlist_index}
