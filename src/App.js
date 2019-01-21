@@ -204,7 +204,7 @@ class App extends Component {
     // playbackstate
     fetch(this.api_host + "/playstate")
       .then(response => response.json())
-      .then(playState => this.setState({ playState }))
+      .then(playState => this.setState({ "playState": playState, "current_index": playState.playlist_index }))
       .catch(error => console.error(error));
   }
 
