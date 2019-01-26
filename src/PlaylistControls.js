@@ -5,7 +5,7 @@ import './PlaylistControls.css';
 
 function PlayListChooserItem(props){
   return(
-    <a className={"dropdown-item chooserItem" + (props.active ? " active" : "")} href="#" onClick={props.onClick}>{props.title}</a>
+    <div className={"dropdown-item chooserItem" + (props.active ? " active" : "")} onClick={props.onClick}>{props.title}</div>
   );
 }
 
@@ -30,7 +30,7 @@ function PlayListChooser(props){
 
   return(
     <div className="dropdown">
-      <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button className="btn btn-secondary dropdown-toggle chooserButton" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {props.displayText}
       </button>
       <div className={dropDownClass} aria-labelledby="dropdownMenuButton">
@@ -140,7 +140,7 @@ class PlaylistControls extends Component {
     }
     return(
       <div className="row playlistControls">
-        <div className="col-sm-3 col-3">
+        <div className="col-sm-5 col-5">
           <PlayListChooser
             displayText = {chooserText}
             activeIndex = {this.props.state.playState.playlist_index}
@@ -148,15 +148,13 @@ class PlaylistControls extends Component {
             selectItemFn = {this.props.setPlaylistFn}
           />
         </div>
-        <div className="col-sm-1 col-1"/>
-        <div className="col-sm-1 col-1">
+        <div className="col-sm-2 col-2">
           <PlayListAddNew
             state = {this.props.state}
             addNewPlaylistFn = {this.props.addNewPlaylistFn}
           />
         </div>
-        <div className="col-sm-1 col-1"/>
-        <div className="col-sm-1 col-1">
+        <div className="col-sm-2 col-2">
           <PlayListDelete
             state = {this.props.state}
             deletePlaylistFn = {this.props.deletePlaylistFn}

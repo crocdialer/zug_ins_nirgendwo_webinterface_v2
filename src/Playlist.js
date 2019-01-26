@@ -19,7 +19,7 @@ function MovieItem(props){
   let iconClickHandler = ()=>{
     console.log("clicked: " + props.movie.path)
 
-    if(props.playlistIndex === 0){
+    if(props.playlistIndex <= 0){
       playerCommand("play", [props.movie.path])
     }
     else{
@@ -37,11 +37,11 @@ function MovieItem(props){
 
   return(
     <div className={movieItemClass}>
-      <div className="col-sm-3 col-3 movieThumb">
+      <div className="col-sm-4 col-4 movieThumb">
         {/* thumb: {props.movie.icon} */}
         <img onClick={iconClickHandler} src={icon_src} className="img-fluid movieThumb" alt={props.movie.icon}/>
       </div>
-      <div className="col-sm-7 col-7 movieTitle">
+      <div className="col-sm-6 col-6 movieTitle">
         <p>{movieTitle}</p>
       </div>
 
@@ -49,9 +49,9 @@ function MovieItem(props){
       {!props.isMainList &&
         <div className="col-sm-2 col-2 moviePlacer">
           <div className="row moviePlacer">
-            <div className="col-sm-4"><a href="#" onClick={moveUpFn}>&uarr;</a></div>
-            <div className="col-sm-4"><a href="#" onClick={moveDownFn}>&darr;</a></div>
-            <div className="col-sm-4"><a href="#" onClick={removeFn}>-</a></div>
+            <div className="col-sm-4"><a onClick={moveUpFn}>&uarr;</a></div>
+            <div className="col-sm-4"><a onClick={moveDownFn}>&darr;</a></div>
+            <div className="col-sm-4"><a onClick={removeFn}>-</a></div>
           </div>
         </div>
       }
@@ -100,6 +100,7 @@ class Playlist extends Component {
 
   constructor(props){
     super(props);
+    this.listRef = React.createRef()
     this.playback = this.playback.bind(this)
   }
 
@@ -115,7 +116,7 @@ class Playlist extends Component {
     let isMainList = (this.props.state.current_index === 0);
 
     return (
-      <div className="container playlist">
+      <div className="container playlist" ref={this.listRef}>
         <PlaylistControls
           state = {this.props.state}
           setPlaylistFn = {this.props.setPlaylistFn}
@@ -137,6 +138,27 @@ class Playlist extends Component {
         {/* {this.renderMovieList(movieList)} */}
       </div>
     );
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    // are we changing the items in the list or load a new one?
+    // new one: do nothing
+    // else: capture the scroll position so we can adjust scroll later.
+    if (prevProps.playlistIndex === this.props.playlistIndex) {
+      const list = this.listRef.current;
+      return list.scrollHeight - list.scrollTop;
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // If we have a snapshot value, we've just added new items.
+    // Adjust scroll so these new items don't push the old ones out of view.
+    // (snapshot here is the value returned from getSnapshotBeforeUpdate)
+    if (snapshot !== null) {
+      const list = this.listRef.current;
+      list.scrollTop = list.scrollHeight - snapshot;
+    }
   }
 }
 

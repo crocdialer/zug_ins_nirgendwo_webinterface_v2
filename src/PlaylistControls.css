@@ -5,6 +5,12 @@
     padding: 10px 0px;
 }
 
+.chooserButton{
+    margin-right: 10px;
+}
+.chooserItem{
+    color: #DDDDDD;
+}
 .chooserItem.active{
     background-color: orange;
     color: #333333;

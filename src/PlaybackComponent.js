@@ -38,15 +38,15 @@ class PlaybackComponent extends Component {
 
   // fast forward (10x)
   fastForward = ()=>{
-    let rate = (this.props.playState.rate == 1 ? 10 : 1)
+    let rate = (this.props.playState.rate == 1 ? 4 : 1)
     playerCommand("set_rate", [rate]);
   }
 
   // fast backward (-10x)
-  fastBackward = ()=>{
-    let rate = (this.props.playState.rate == 1 ? -10 : 1)
-    playerCommand("set_rate", [rate]);
-  }
+  // fastBackward = ()=>{
+  //   let rate = (this.props.playState.rate == 1 ? -10 : 1)
+  //   playerCommand("set_rate", [rate]);
+  // }
 
 
   render(){

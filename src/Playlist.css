@@ -14,9 +14,10 @@
     font-size: 32px;
     font-weight: bold;
     color: white;
+    cursor: move;
 }
 
-.moviePlacer a:hover, a:active{
+.moviePlacer :hover, :active{
     text-decoration: none;
 }
 
@@ -25,5 +26,5 @@
 }
 
 .movieThumb{
-
+    padding: 0px;
 }

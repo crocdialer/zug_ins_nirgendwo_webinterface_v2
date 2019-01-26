@@ -172,10 +172,10 @@ class App extends Component {
   render() {
     return (
       <div className="zug_ins_nirgendwo_ui">
-        <NavBar
+        {/*<NavBar
           api_host={this.api_host}
           updateFn={this.update}
-        />
+        />*/}
         <PlaybackComponent
           api_host={this.api_host}
           playState={this.state.playState}
