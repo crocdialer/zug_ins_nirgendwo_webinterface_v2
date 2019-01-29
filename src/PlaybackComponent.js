@@ -51,8 +51,12 @@ class PlaybackComponent extends Component {
 
   render(){
 
-    let movieTitle = this.props.playState.path.substring(this.props.playState.path.lastIndexOf('/') + 1);
-    movieTitle = movieTitle.substring(0, movieTitle.lastIndexOf('.'))
+    let movieTitle = "player not connected"
+
+    if(this.props.playState.connected){
+      movieTitle = this.props.playState.path.substring(this.props.playState.path.lastIndexOf('/') + 1);
+      movieTitle = movieTitle.substring(0, movieTitle.lastIndexOf('.'))
+    }
 
     return(
       <div className="container playbackComponent">

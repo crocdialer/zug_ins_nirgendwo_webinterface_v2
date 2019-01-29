@@ -1,6 +1,7 @@
 import {postData, playerCommand} from './App.js'
 import React, { Component } from 'react';
 import PlaylistControls, {PlayListChooser} from './PlaylistControls.js'
+import $ from 'jquery';
 import './Playlist.css';
 
 var api_host = "http://" + window.location.hostname +
@@ -21,6 +22,7 @@ function MovieItem(props){
 
     if(props.playlistIndex <= 0){
       playerCommand("play", [props.movie.path])
+      playerCommand("delay", [props.movie.delay])
     }
     else{
       props.playbackFn(props.index, props.playlistIndex)
@@ -35,6 +37,17 @@ function MovieItem(props){
   let movieTitle = props.movie.path.substring(props.movie.path.lastIndexOf('/') + 1);
   movieTitle = movieTitle.substring(0, movieTitle.lastIndexOf('.'))
 
+
+  let delay_input_id = "delay_input"
+
+  let movieSettingsFn = ()=>{
+    let m = props.movie
+    m.delay = parseFloat($("#" + delay_input_id).val())
+    console.log(m)
+    props.setMovieSettingsFn(m)
+  }
+
+
   return(
     <div className={movieItemClass}>
       <div className="col-sm-4 col-4 movieThumb">
@@ -43,6 +56,19 @@ function MovieItem(props){
       </div>
       <div className="col-sm-6 col-6 movieTitle">
         <p>{movieTitle}</p>
+        {!props.isMainList &&
+         <p>delay: {props.movie.delay}s</p>
+        }
+        {props.isMainList &&
+
+          <form className="form-inline">
+            <div className="form-group mx-sm-3 mb-2">
+              <label htmlFor={delay_input_id} className="sr-only">{props.movie.delay}</label>
+              <input type="text" className="form-control" id={delay_input_id} placeholder={props.movie.delay}/>
+            </div>
+            <button className="btn btn-secondary mb-2" onClick={movieSettingsFn}>ok</button>
+          </form>
+        }
       </div>
 
       {/* movie placement and deletion*/}
@@ -89,6 +115,7 @@ function MovieList(props){
         removePlaylistIndexFn={props.removePlaylistIndexFn}
         addToPlaylistFn={props.addToPlaylistFn}
         playbackFn={props.playbackFn}
+        setMovieSettingsFn={props.setMovieSettingsFn}
         />
       );
     });
@@ -134,6 +161,7 @@ class Playlist extends Component {
           removePlaylistIndexFn={this.props.removePlaylistIndexFn}
           addToPlaylistFn={this.props.addToPlaylistFn}
           playbackFn={this.playback}
+          setMovieSettingsFn={this.props.setMovieSettingsFn}
         />
         {/* {this.renderMovieList(movieList)} */}
       </div>

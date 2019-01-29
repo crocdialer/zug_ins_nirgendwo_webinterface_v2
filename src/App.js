@@ -31,6 +31,7 @@ class App extends Component {
           movies:[
             // {
             //   path:"/path/to/Reise nach Poopmandoo.mp4",
+            //   delay: 0.0,
             //   icon:""
             // }
           ]
@@ -54,6 +55,7 @@ class App extends Component {
     this.removePlaylistIndex = this.removePlaylistIndex.bind(this);
     this.addToPlaylist = this.addToPlaylist.bind(this);
     this.onPlaylistsModified = this.onPlaylistsModified.bind(this);
+    this.setMovieSettings = this.setMovieSettings.bind(this);
 
     // register event-stream
     this.eventSource = new EventSource(this.api_host + "/events")
@@ -125,6 +127,25 @@ class App extends Component {
     this.onPlaylistsModified();
   }
 
+  setMovieSettings(movieObj){
+    console.log("setMovieSettings: " + movieObj)
+    let playlists = this.state.playlists;
+
+    for(let i in this.state.playlists){
+      let list = this.state.playlists[i]
+
+      for(let j in list.movies){
+        if(list.movies[j].path == movieObj.path){
+          list.movies[j] = movieObj
+        }
+      }
+    }
+    this.setState({playlists: playlists});
+
+    // send changes to backend
+    postData(api_host + "/movie", movieObj)
+  }
+
   swapPlaylistIndices(lhsIndex, rhsIndex){
 
     let movies = this.state.playlists[this.state.current_index].movies
@@ -189,6 +210,7 @@ class App extends Component {
           addToPlaylistFn={this.addToPlaylist}
           swapPlaylistIndicesFn={this.swapPlaylistIndices}
           removePlaylistIndexFn={this.removePlaylistIndex}
+          setMovieSettingsFn={this.setMovieSettings}
         />
       </div>
     );
