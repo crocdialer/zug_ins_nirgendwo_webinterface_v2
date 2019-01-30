@@ -120,6 +120,9 @@ class App extends Component {
   addToPlaylist(movieObj, playlistIndex){
     console.log("addToPlaylist: " + movieObj + " -> playlist " + playlistIndex)
     let playlists = this.state.playlists;
+    if(!playlists[playlistIndex].movies){
+      playlists[playlistIndex].movies = []
+    }
     playlists[playlistIndex].movies.push(movieObj);
     this.setState({playlists: playlists});
 
