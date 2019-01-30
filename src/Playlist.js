@@ -38,11 +38,14 @@ function MovieItem(props){
   movieTitle = movieTitle.substring(0, movieTitle.lastIndexOf('.'))
 
 
-  let delay_input_id = "delay_input"
+  let delay_input_id = "delay_input_" + props.index
 
   let movieSettingsFn = ()=>{
     let m = props.movie
-    m.delay = parseFloat($("#" + delay_input_id).val())
+    let strVal = $("#" + delay_input_id).val()
+    console.log(strVal)
+    let num = parseFloat(strVal)
+    m.delay = (num == NaN ? 0.0 : num)
     console.log(m)
     props.setMovieSettingsFn(m)
   }
@@ -63,10 +66,10 @@ function MovieItem(props){
 
           <form className="form-inline">
             <div className="form-group mx-sm-3 mb-2">
-              <label htmlFor={delay_input_id} className="sr-only">{props.movie.delay}</label>
-              <input type="text" className="form-control" id={delay_input_id} placeholder={props.movie.delay}/>
+              <label htmlFor={delay_input_id} className="sr-only">delay</label>
+              <input type="text" className="form-control" id={delay_input_id} defaultValue={props.movie.delay}/>
             </div>
-            <button className="btn btn-secondary mb-2" onClick={movieSettingsFn}>ok</button>
+            <button type="button" className="btn btn-secondary mb-2" onClick={movieSettingsFn}>ok</button>
           </form>
         }
       </div>

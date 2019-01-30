@@ -16,8 +16,8 @@ class App extends Component {
 
       playState : {
         path: "",
-        playlist_index : -1,
-        movie_index : -1,
+        playlist_index : 0,
+        movie_index : 0,
         position : 0.0,
         duration : 0.0,
         rate : 1.0,
@@ -128,7 +128,8 @@ class App extends Component {
   }
 
   setMovieSettings(movieObj){
-    console.log("setMovieSettings: " + movieObj)
+    console.log("setMovieSettings: ")
+    console.log(movieObj)
     let playlists = this.state.playlists;
 
     for(let i in this.state.playlists){
